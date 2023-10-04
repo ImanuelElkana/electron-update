@@ -27,4 +27,16 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'ImanuelElkana',
+          name: 'https://github.com/ImanuelElkana/electron-update'
+        },
+        prerelease: true
+      }
+    }
+  ]
 };

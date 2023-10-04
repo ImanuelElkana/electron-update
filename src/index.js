@@ -29,6 +29,7 @@ const createWindow = () => {
 };
 
 app.on('ready', createWindow);
+  console.log('tste')
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
