@@ -1,5 +1,14 @@
-const { app, BrowserWindow } = require('electron');
+require('update-electron-app')()
+const { app, BrowserWindow, dialog, autoUpdater } = require('electron');
 const path = require('path');
+const server = 'http://localhost:3000'
+const url = `${server}/update/${process.platform}/${app.getVersion()}`
+
+setInterval(() => {
+  autoUpdater.checkForUpdates()
+}, 60000)
+
+autoUpdater.setFeedURL({ url })
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -23,19 +32,33 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
+
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail:
+      'A new version has been downloaded. Restart the application to apply the updates.'
+  }
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall()
+  })
+})
+
+autoUpdater.on('error', (message) => {
+  console.error('There was a problem updating the application')
+  console.error(message)
+})
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
