@@ -1,7 +1,7 @@
 {
   "name": "my-jhon",
   "productName": "my-jhon",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
