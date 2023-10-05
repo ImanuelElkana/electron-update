@@ -33,7 +33,7 @@ module.exports = {
       config: {
         repository: {
           owner: 'ImanuelElkana',
-          name: 'https://github.com/ImanuelElkana/electron-update'
+          name: 'electron-update'
         },
         prerelease: true
       }
